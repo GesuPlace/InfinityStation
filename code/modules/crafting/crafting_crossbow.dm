@@ -1,4 +1,4 @@
-/obj/item/weapon/crossbowframe
+/obj/item/crossbowframe
 	name = "crossbow frame"
 	desc = "A half-finished crossbow."
 	icon_state = "crossbowframe0"
@@ -6,15 +6,15 @@
 	icon = 'icons/obj/crafting_icons.dmi'
 
 /decl/crafting_stage/material/crossbow_rods
-	begins_with_object_type = /obj/item/weapon/crossbowframe
+	begins_with_object_type = /obj/item/crossbowframe
 	completion_trigger_type = /obj/item/stack/material/rods
-	stack_consume_amount = 3
+	stack_consume_amount = 1
 	item_icon_state = "crossbowframe1"
 	progress_message = "You assemble a backbone of rods around the wooden stock."
 	next_stages = list(/decl/crafting_stage/welding/crossbow_rods)
 
 /decl/crafting_stage/welding/crossbow_rods
-	completion_trigger_type = /obj/item/weapon/weldingtool
+	completion_trigger_type = /obj/item/weldingtool
 	item_icon_state = "crossbowframe2"
 	progress_message = "You weld the rods into place."
 	next_stages = list(/decl/crafting_stage/wiring/crossbow_battery)
@@ -28,7 +28,7 @@
 
 /decl/crafting_stage/material/crossbow_plastic
 	completion_trigger_type = /obj/item/stack/material
-	stack_consume_amount  = 3
+	stack_consume_amount  = 1
 	item_icon_state = "crossbowframe4"
 	item_desc = "It is a half-built crossbow with a steel backbone and a cell mount installed."
 	progress_message = "You assemble and install a heavy plastic lath onto the crossbow."
@@ -43,4 +43,4 @@
 
 /decl/crafting_stage/screwdriver/crossbow
 	progress_message = "You secure the crossbow's various parts."
-	product = /obj/item/weapon/gun/launcher/crossbow
+	product = /obj/item/gun/launcher/crossbow

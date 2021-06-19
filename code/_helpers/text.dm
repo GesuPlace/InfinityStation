@@ -29,18 +29,33 @@
 		return
 
 	if(max_length)
+		// Здесь должна быть защита от Zalgo-текста, но синтаксис regex'а в DM понять непросто ~bear1ake
+		if(length(input) >= max_length * 3)	// Кто-то попытается ввести тяжелый текст? Не более 3-х байт на символ, пожалуйста
+			to_chat(usr, "<span class='warning'>Не вводите текст с большим количеством комбинированных символов.</span>")
+			return
 		//testing shows that just looking for > max_length alone will actually cut off the final character if message is precisely max_length, so >= instead
-		if(length(input) >= max_length)
+		if(length_char(input) >= max_length)
 			var/overflow = ((length(input)+1) - max_length)
 			to_chat(usr, "<span class='warning'>Your message is too long by [overflow] character\s.</span>")
 			return
-		input = copytext(input,1,max_length)
+/* [INF]
+			if(usr)
+				while(length_char(input) >= max_length)
+					if(!input)
+						return
+					var/overflow = ((length(input)+1) - max_length)
+					input = input(usr, "Your message is too long by [overflow] character\s.", "Too long!", input) as message|null
+			else
+				// Enter debug msg here
+				return
+* [/INF] */
+		input = copytext_char(input,1,max_length)
 
 	if(extra)
 		input = replace_characters(input, list("\n"=" ","\t"=" "))
 
 	if(encode)
-		// The below \ escapes have a space inserted to attempt to enable Travis auto-checking of span class usage. Please do not remove the space.
+		// The below \ escapes have a space inserted to attempt to enable unit testing of span class usage. Please do not remove the space.
 		//In addition to processing html, html_encode removes byond formatting codes like "\ red", "\ i" and other.
 		//It is important to avoid double-encode text, it can "break" quotes and some other characters.
 		//Also, keep in mind that escaped characters don't work in the interface (window titles, lower left corner of the main window, etc.)
@@ -65,14 +80,14 @@
 
 //Filters out undesirable characters from names
 /proc/sanitizeName(var/input, var/max_length = MAX_NAME_LEN, var/allow_numbers = 0, var/force_first_letter_uppercase = TRUE)
-	if(!input || length(input) > max_length)
+	if(!input || length_char(input) > max_length)
 		return //Rejects the input if it is null or if it is longer then the max length allowed
 
 	var/number_of_alphanumeric	= 0
 	var/last_char_group			= 0
 	var/output = ""
 
-	for(var/i=1, i<=length(input), i++)
+	for(var/i=1, i<=length_char(input), i++)
 		var/ascii_char = text2ascii(input,i)
 		switch(ascii_char)
 			// A  .. Z
@@ -122,7 +137,7 @@
 	if(number_of_alphanumeric < 2)	return		//protects against tiny names like "A" and also names like "' ' ' ' ' ' ' '"
 
 	if(last_char_group == 1)
-		output = copytext(output,1,length(output))	//removes the last character (in this case a space)
+		output = copytext_char(output,1,length(output))	//removes the last character (in this case a space)
 
 	for(var/bad_name in list("space","floor","wall","r-wall","monkey","unknown","inactive ai","plating"))	//prevents these common metagamey names
 		if(cmptext(output,bad_name))	return	//(not case sensitive)
@@ -254,7 +269,6 @@
 		characters += character
 	return JOINTEXT(characters)
 
-
 //Returns a string with reserved characters and spaces before the first letter removed
 /proc/trim_left(text)
 	for (var/i = 1 to length(text))
@@ -359,7 +373,7 @@ proc/TextPreview(var/string,var/len=40)
 /proc/create_text_tag(var/tagname, var/tagdesc = tagname, var/client/C = null)
 	if(!(C && C.get_preference_value(/datum/client_preference/chat_tags) == GLOB.PREF_SHOW))
 		return tagdesc
-	return "<IMG src='\ref['./icons/chattags.dmi']' class='text_tag' iconstate='[tagname]'" + (tagdesc ? " alt='[tagdesc]'" : "") + ">"
+	return icon2html(icon('./icons/chattags.dmi', tagname), world, realsize=TRUE, class="text_tag")
 
 /proc/contains_az09(var/input)
 	for(var/i=1, i<=length(input), i++)
@@ -464,8 +478,6 @@ var/list/alphabet = list("a","b","c","d","e","f","g","h","i","j","k","l","m","n"
 	t = replacetext(t, "\[cell\]", "<td>")
 	t = replacetext(t, "\[exologo\]", "<img src = exologo.png>")
 	t = replacetext(t, "\[logo\]", "<img src = ntlogo.png>")
-	t = replacetext(t, "я", "&#1103;")
-	t = replacetext(t, "&#255;", "&#1103;")
 	t = replacetext(t, "\[bluelogo\]", "<img src = bluentlogo.png>")
 	t = replacetext(t, "\[solcrest\]", "<img src = sollogo.png>")
 	t = replacetext(t, "\[torchltd\]", "<img src = exologo.png>")
@@ -476,7 +488,9 @@ var/list/alphabet = list("a","b","c","d","e","f","g","h","i","j","k","l","m","n"
 	t = replacetext(t, "\[xynlogo\]", "<img src = xynlogo.png>")
 	t = replacetext(t, "\[fleetlogo\]", "<img src = fleetlogo.png>")
 	t = replacetext(t, "\[sfplogo\]", "<img src = sfplogo.png>")
-	t = replacetext(t, "\[ccalogo\]", "<img src = ccalogo.png>")//inf
+	t = replacetext(t, "\[ccalogo\]", "<img src = ccalogo.png>")// INF
+	t = replacetext(t, "\[foundlogo\]", "<img src = foundlogo.png>")// INF
+	t = replacetext(t, "\[sierralogo\]", "<img src = sierralogo.png>")// INF
 	t = replacetext(t, "\[editorbr\]", "")
 	return t
 
@@ -485,8 +499,8 @@ var/list/alphabet = list("a","b","c","d","e","f","g","h","i","j","k","l","m","n"
 /proc/digitalPencode2html(var/text)
 	text = replacetext(text, "\[pre\]", "<pre>")
 	text = replacetext(text, "\[/pre\]", "</pre>")
-	text = replacetext(text, "\[fontred\]", "<font color=\"red\">") //</font> to pass travis html tag integrity check
-	text = replacetext(text, "\[fontblue\]", "<font color=\"blue\">")//</font> to pass travis html tag integrity check
+	text = replacetext(text, "\[fontred\]", "<font color=\"red\">") //</font> to pass html tag integrity unit test
+	text = replacetext(text, "\[fontblue\]", "<font color=\"blue\">")//</font> to pass html tag integrity unit test
 	text = replacetext(text, "\[fontgreen\]", "<font color=\"green\">")
 	text = replacetext(text, "\[/font\]", "</font>")
 	text = replacetext(text, "\[redacted\]", "<span class=\"redacted\">R E D A C T E D</span>")
@@ -496,8 +510,8 @@ var/list/alphabet = list("a","b","c","d","e","f","g","h","i","j","k","l","m","n"
 /proc/html2pencode(t)
 	t = replacetext(t, "<pre>", "\[pre\]")
 	t = replacetext(t, "</pre>", "\[/pre\]")
-	t = replacetext(t, "<font color=\"red\">", "\[fontred\]")//</font> to pass travis html tag integrity check
-	t = replacetext(t, "<font color=\"blue\">", "\[fontblue\]")//</font> to pass travis html tag integrity check
+	t = replacetext(t, "<font color=\"red\">", "\[fontred\]")//</font> to pass html tag integrity unit test
+	t = replacetext(t, "<font color=\"blue\">", "\[fontblue\]")//</font> to pass html tag integrity unit test
 	t = replacetext(t, "<font color=\"green\">", "\[fontgreen\]")
 	t = replacetext(t, "</font>", "\[/font\]")
 	t = replacetext(t, "<BR>", "\[br\]")
@@ -533,7 +547,9 @@ var/list/alphabet = list("a","b","c","d","e","f","g","h","i","j","k","l","m","n"
 	t = replacetext(t, "<img src = daislogo.png>", "\[daislogo\]")
 	t = replacetext(t, "<img src = xynlogo.png>", "\[xynlogo\]")
 	t = replacetext(t, "<img src = sfplogo.png>", "\[sfplogo\]")
-	t = replacetext(t, "<img src = ccalogo.png>", "\[ccalogo\]")//inf
+	t = replacetext(t, "<img src = ccalogo.png>", "\[ccalogo\]")// INF
+	t = replacetext(t, "<img src = foundlogo.png>", "\[foundlogo\]")// INF
+	t = replacetext(t, "<img src = sierralogo.png>", "\[sierralogo\]")// INF
 	t = replacetext(t, "<span class=\"paper_field\"></span>", "\[field\]")
 	t = replacetext(t, "<span class=\"redacted\">R E D A C T E D</span>", "\[redacted\]")
 	t = strip_html_properly(t)
@@ -620,7 +636,7 @@ var/list/alphabet = list("a","b","c","d","e","f","g","h","i","j","k","l","m","n"
 // If char isn't part of the text the entire text is returned
 /proc/copytext_after_last(var/text, var/char)
 	var/regex/R = regex("(\[^[char]\]*)$")
-	R.Find(text)
+	regex_find(R, text)
 	return R.group[1]
 
 /proc/sql_sanitize_text(var/text)
@@ -632,3 +648,20 @@ var/list/alphabet = list("a","b","c","d","e","f","g","h","i","j","k","l","m","n"
 /proc/text2num_or_default(text, default)
 	var/result = text2num(text)
 	return "[result]" == text ? result : default
+
+/proc/text2regex(text)
+	var/end = findlasttext(text, "/")
+	if (end > 2 && length(text) > 2 && text[1] == "/")
+		var/flags = end == length(text) ? FALSE : copytext(text, end + 1)
+		var/matcher = copytext(text, 2, end)
+		try
+			return flags ? regex(matcher, flags) : regex(matcher)
+		catch()
+	log_error("failed to parse text to regex: [text]")
+
+/proc/process_chat_markup(message)
+	if (message && length(config.chat_markup))
+		for (var/list/entry in config.chat_markup)
+			var/regex/matcher = entry[1]
+			message = replacetext_char(message, matcher, entry[2])
+	return message

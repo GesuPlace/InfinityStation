@@ -38,6 +38,8 @@
 	path = /obj/item/device/uplink_service/jamming
 
 /datum/uplink_item/item/services/fake_update_annoncement
+	name = "Fake Update Annoncement"
+	desc = "A single-use device, that when activated, throws a fake announcement to station."
 	item_cost = 40
 	path = /obj/item/device/uplink_service/fake_update_announcement
 
@@ -46,8 +48,8 @@
 	item_cost = round(DEFAULT_TELECRYSTAL_AMOUNT / 2)
 
 	spawn(2)
-		name = "[command_name()] Update Announcement"
-		desc = "Causes a falsified [command_name()] Update."
+		name = "[GLOB.using_map.boss_name] Update Announcement"
+		desc = "Causes a falsified [GLOB.using_map.boss_name] Update."
 
 /***************
 * Service Item *
@@ -207,7 +209,7 @@
 	state = CURRENTLY_ACTIVE
 	update_icon()
 	var/datum/computer_file/report/crew_record/random_record
-	var/obj/item/weapon/card/id/I = user.GetIdCard()
+	var/obj/item/card/id/I = user.GetIdCard()
 	if(GLOB.all_crew_records.len)
 		random_record = pick(GLOB.all_crew_records)
 	var/datum/computer_file/report/crew_record/new_record = CreateModularRecord(user)

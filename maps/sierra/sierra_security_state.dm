@@ -25,8 +25,8 @@
 	icon = 'maps/sierra/icons/security_state.dmi'
 
 /decl/security_level/default/sierradept/code_green
-	name = "code green"
-	icon = 'icons/misc/security_state.dmi'
+	name = "код зелёный"
+	icon = 'infinity/icons/misc/security_state.dmi'
 
 	light_max_bright = 0.25
 	light_inner_range = 0.1
@@ -46,9 +46,11 @@
 	notify_station()
 	GLOB.using_map.unlock_secure_areas()
 	GLOB.using_map.unlock_high_secure_areas()
+	GLOB.using_map.lockdown("open")
 
 /decl/security_level/default/sierradept/code_violet
-	name = "code violet"
+	name = "код фиолетовый"
+	icon = 'infinity/icons/misc/security_state.dmi'
 
 	light_max_bright = 0.25
 	light_inner_range = 1
@@ -76,9 +78,11 @@
 	GLOB.using_map.unlock_high_secure_areas()
 	GLOB.using_map.unlock_secure_areas()
 	GLOB.using_map.toggle_crew_sensors(2)
+	GLOB.using_map.lockdown("open")
 
 /decl/security_level/default/sierradept/code_orange
-	name = "code orange"
+	name = "код оранжевый"
+	icon = 'infinity/icons/misc/security_state.dmi'
 
 	light_max_bright = 0.25
 	light_inner_range = 1
@@ -108,10 +112,11 @@
 	GLOB.using_map.lock_high_secure_areas()
 	GLOB.using_map.unlock_secure_areas()
 	GLOB.using_map.toggle_crew_sensors(1)
+	GLOB.using_map.lockdown("open")
 
 /decl/security_level/default/sierradept/code_blue
-	name = "code blue"
-	icon = 'icons/misc/security_state.dmi'
+	name = "код синий"
+	icon = 'infinity/icons/misc/security_state.dmi'
 
 	light_max_bright = 0.5
 	light_inner_range = 1
@@ -135,10 +140,11 @@
 	разрешено обыскивать сотрудников и отсеки, а так же держать оружие на виду.", "Внимание! Код угрозы понижен до Синего")
 	notify_station()
 	GLOB.using_map.unlock_secure_areas()
+	GLOB.using_map.lockdown("open")
 
 /decl/security_level/default/sierradept/code_red
-	name = "code red"
-	icon = 'icons/misc/security_state.dmi'
+	name = "код красный"
+	icon = 'infinity/icons/misc/security_state.dmi'
 
 	light_max_bright = 0.5
 	light_inner_range = 1
@@ -162,6 +168,7 @@
 	GLOB.using_map.lock_secure_areas()
 	GLOB.using_map.lock_high_secure_areas()
 	GLOB.using_map.toggle_crew_sensors(3)
+	GLOB.using_map.lockdown("close")
 
 /decl/security_level/default/sierradept/code_red/switching_down_to()
 	security_announcement_red.Announce("Взрывное устройство было обезврежено. \
@@ -171,9 +178,10 @@
 	notify_station()
 	GLOB.using_map.lock_secure_areas()
 	GLOB.using_map.lock_high_secure_areas()
+	GLOB.using_map.lockdown("close")
 
 /decl/security_level/default/sierradept/code_delta
-	name = "code delta"
+	name = "код дельта"
 
 	light_max_bright = 0.7
 	light_inner_range = 1
@@ -181,7 +189,7 @@
 	light_color_alarm = COLOR_RED
 	light_color_status_display = COLOR_NAVY_BLUE
 
-	icon = 'icons/misc/security_state.dmi'
+	icon = 'infinity/icons/misc/security_state.dmi'
 	overlay_alarm = "alarm_delta"
 	overlay_status_display = "status_display_delta"
 
@@ -196,6 +204,7 @@
 	GLOB.using_map.unlock_secure_areas()
 	GLOB.using_map.unlock_high_secure_areas()
 	GLOB.using_map.toggle_crew_sensors(3)
+	GLOB.using_map.lockdown("open")
 
 #undef PSI_IMPLANT_AUTOMATIC
 #undef PSI_IMPLANT_SHOCK

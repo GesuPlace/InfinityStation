@@ -37,7 +37,7 @@
 	description = "A medium-sized asteroid full of minerals. Old mining facility detected at one of sides, owner - NanoTrasen."
 	prefix = "maps/away_inf/"
 	suffixes = list("mining/mining-asteroid.dmm")
-	cost = 0.5
+	spawn_cost = 1 // WAS 0.5
 	accessibility_weight = 10
 	generate_mining_by_z = 1
 	apc_test_exempt_areas = list(
@@ -50,8 +50,8 @@
 		/area/outpost/mining/relay = NO_SCRUBBER|NO_VENT,
 		/area/shuttle/abadoned_data_capsule = NO_SCRUBBER|NO_VENT
 	)
-	area_usage_test_exempted_root_areas = list(/area/mine)
-//	area_usage_test_exempted_areas = list(/area/djstation)
+	area_usage_test_exempted_root_areas = list(/area/mine, /area/outpost)
+	area_usage_test_exempted_areas = list(/area/djstation, /area/shuttle/abadoned_data_capsule)
 	area_coherency_test_exempt_areas =  list(/area/mine/explored, /area/mine/unexplored)
 
 /obj/effect/shuttle_landmark/mining/nav1
@@ -125,7 +125,7 @@
 	id = "awaysite_mining_signal"
 	description = "A mineral-rich, formerly-volcanic site on a planetoid."
 	suffixes = list("mining/mining-signal.dmm")
-	cost = 1
+	spawn_cost = 1
 	base_turf_for_zs = /turf/simulated/floor/asteroid
 
 /obj/effect/shuttle_landmark/away

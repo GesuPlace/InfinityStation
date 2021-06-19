@@ -4,9 +4,11 @@
 
 	var/atom/holder
 	var/mob/living/silicon/ai/MyAI
-	density = 0
+	density = FALSE
 	invisibility = INVISIBILITY_SYSTEM
 //	see_invisible = SEE_INVISIBLE_LIVING
+
+	simulated = FALSE
 
 /mob/AiHolder/New(nlocation)
 	. = ..()

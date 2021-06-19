@@ -16,6 +16,7 @@
 		LANGUAGE_HUMAN_SELENIAN = 15,
 		LANGUAGE_SPACER = 20,
 		LANGUAGE_HUMAN_AVALON = 25, //inf
+		LANGUAGE_HUMAN_MIRANIAN = 15, //inf
 		LANGUAGE_HUMAN_LORRIMAN = 10 //inf
 	)
 	syllables = list(
@@ -26,3 +27,4 @@
 		"sta", "una", "ion", "tra", "men", "ele", "nao", "uma", "ame", "dos", "uno", "mas",
 		"ndo", "nha", "ver", "voc", "uma"
 	)
+	has_written_form = TRUE

@@ -27,18 +27,17 @@
 
 	map_admin_faxes = list("NanoTrasen Central Office")
 
-	evac_controller_type = /datum/evacuation_controller/starship
+	evac_controller_type = /datum/evacuation_controller/starship/fast
 
 	default_law_type = /datum/ai_laws/nanotrasen
 	use_overmap = 1
 	num_exoplanets = 1
 	planet_size = list(129,129)
 
-	playable = 1
-	recommended_players = 20
 //	minimum_players = 0 its already 0
 
-	away_site_budget = 3.5
+	away_site_budget = 5.5 // Было 5, увеличили на 10% вместе с уменьешением цены для одноуровневых авеек ~bear1ake
+	min_offmap_players = 10
 
 	id_hud_icons = 'maps/sierra/icons/assignment_hud.dmi'
 

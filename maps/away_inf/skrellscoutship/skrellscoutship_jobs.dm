@@ -36,12 +36,12 @@
 	desc = "SSV Captain"
 	region = ACCESS_REGION_NONE
 
-/obj/item/weapon/card/id/skrellscoutship
+/obj/item/card/id/skrellscoutship
 	color = COLOR_GRAY40
 	detail_color = "#7331c4"
 	access = list(access_skrellscoutship)
 
-/obj/item/weapon/card/id/skrellscoutship/captain
+/obj/item/card/id/skrellscoutship/captain
 	access = list(access_skrellscoutship, access_skrellscoutship_captain)
 	extra_details = list("goldstripe")
 
@@ -56,7 +56,11 @@
 	total_positions = 5
 	whitelisted_species = list("Skrell")
 	outfit_type = /decl/hierarchy/outfit/job/skrellscoutship
-	info = "Your vessel is scouting through unknown space, working to map out any potential dangers, as well as potential allies."
+	info = "Ваше судно получило приказ разведать данный сектор, отметив на нем точки интереса, возможных врагов и возможных союзников. \
+	\
+	Ваше присутсвие должно оставаться в секрете, однако устранение свидетелей запрещено, т.к. может повлечь дипламатические конфликты. \
+	В случае контакта с патрульными судами других государств рекомендуется выйти на связь для избежания конфликта, не раскрывая свою истинную миссию. \
+	Вы не являетесь спасателями и не должны реагировать на любые запросы о помощи."
 	branch = /datum/mil_branch/skrell_fleet
 	rank = /datum/mil_rank/skrell_fleet
 	allowed_branches = list(/datum/mil_branch/skrell_fleet)
@@ -69,12 +73,13 @@
 					SKILL_WEAPONS = SKILL_ADEPT,
 					SKILL_MEDICAL = SKILL_BASIC)
 
+	required_role = list("Qrri-Vuxix")
+
 /datum/job/submap/skrellscoutship_crew/leader
 	title = "Qrri-Vuxix"
 	supervisors = "your SDTF"
 	total_positions = 1
 	outfit_type = /decl/hierarchy/outfit/job/skrellscoutship/leader
-	info = "Your vessel is scouting through unknown space, working to map out any potential dangers, as well as potential allies."
 	is_semi_antagonist = TRUE
 	min_skill = list(SKILL_EVA = SKILL_ADEPT,
 					SKILL_PILOT = SKILL_ADEPT,
@@ -82,6 +87,8 @@
 					SKILL_COMBAT = SKILL_ADEPT,
 					SKILL_WEAPONS = SKILL_ADEPT,
 					SKILL_MEDICAL = SKILL_BASIC)
+
+	required_role = null
 
 /datum/job/submap/skrellscoutship_crew/equip(var/mob/living/carbon/human/H, var/alt_title, var/datum/mil_branch/branch, var/datum/mil_rank/grade)
 	. = ..(H, alt_title, branch, grade)	//passing through arguments
@@ -106,7 +113,7 @@
 	var/skrellcaste = input(H, "What is your Skrell's Caste?", "SDTF Rank") as null|anything in skrellscoutcastes
 	if(skrellcaste)
 		var/skrellsubcaste = input(H, "What is your Skrell's Subcaste?", "SDTF Rank") as null|anything in skrellscoutcastes[skrellcaste]
-		var/obj/item/weapon/card/id/C = H.wear_id
+		var/obj/item/card/id/C = H.wear_id
 		if(istype(C))
 			C.assignment = skrellsubcaste
 
@@ -132,10 +139,10 @@
 	pda_type = /obj/item/modular_computer/pda
 	pda_slot = slot_l_store
 	l_ear = /obj/item/device/radio/headset/skrellian
-	id_type = /obj/item/weapon/card/id/skrellscoutship
+	id_types = list(/obj/item/card/id/skrellscoutship)
 	l_pocket = /obj/item/clothing/accessory/badge/tags/skrell
 
 /decl/hierarchy/outfit/job/skrellscoutship/leader
 	name = "Xilvuxix Captain"
-	id_type = /obj/item/weapon/card/id/skrellscoutship/captain
+	id_types = list(/obj/item/card/id/skrellscoutship/captain)
 

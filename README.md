@@ -13,8 +13,8 @@
 <h4 align="center">Сборка игры Space Station 13 на основе сборки <a href="https://github.com/Baystation12/Baystation12">Baystation12</a>.</h4>
 
 <p align="center">
-  <a href="https://travis-ci.org/infinitystation/Baystation12">
-    <img src="https://travis-ci.org/infinitystation/Baystation12.svg?branch=master"
+  <a href="https://github.com/infinitystation/Baystation12/actions">
+    <img src="https://github.com/infinitystation/Baystation12/actions/workflows/test.yml/badge.svg"
          alt="Build Status">
   </a>
   <a href="https://www.codefactor.io/repository/github/infinitystation/baystation12">
@@ -61,7 +61,7 @@
 
 ## ЗАГРУЗКА
 
-Эта инструкция написана для применения в ОС Windows.  
+Эта инструкция написана для применения в ОС Windows.
 Для загрузки копии сборки нашего проекта, пожалуйста, выберите один из перечисленных ниже вариантов.
 
 <li> <b>Вариант №1</b>
@@ -76,13 +76,17 @@
 <ul>
 1. Проверьте наличие, и установите в случае отсутствия, приложение git-клиента для ПК: <br>
   <ul>
-<a href="https://gitforwindows.org/">Git Bash</a>, 
-<a href="https://www.syntevo.com/smartgit/">SmartGit</a>, 
-<a href="https://www.sourcetreeapp.com/">Sourse Tree</a>, 
-<a href="https://git-scm.com/">git-scm</a>, 
-<a href="https://tortoisegit.org/">TortoiseGit</a>, 
+<a href="https://gitforwindows.org/">Git Bash</a>,
+<a href="https://www.syntevo.com/smartgit/">SmartGit</a>,
+<<<<<<< HEAD
+<a href="https://www.sourcetreeapp.com/">Sourse Tree</a>,
+=======
+<a href="https://www.sourcetreeapp.com/">Sourcetree</a>,
+>>>>>>> 716056b9a91c5a19ebfe11f2addfb108ebd56345
+<a href="https://git-scm.com/">git-scm</a>,
+<a href="https://tortoisegit.org/">TortoiseGit</a>,
 или аналогичный на ваш выбор.
-  </ul> 
+  </ul>
 2. Откройте приложение выбранного и установленного вами git-клиента. <br>
 3. Клонируйте git-репозиторий сборки нашего проекта на локальное устройство с помощью git-клиента: <br>
   <ul>
@@ -101,17 +105,17 @@
 
 ## УСТАНОВКА
 
-Эта инструкция написана для применения в ОС Windows.  
+Эта инструкция написана для применения в ОС Windows.
 
 1. Проверьте наличие, и установите в случае отсутствия, **приложение <a href="http://www.byond.com/">BYOND</a>**.
 2. С помощью приложения **Dream Maker**, идущего в комплекте с <a href="http://www.byond.com/">BYOND</a>, откройте файл <a href="https://github.com/infinitystation/Baystation12/blob/master/baystation12.dme">baystation12.dme</a>.
 3. Нажмите **Build** («Собрать»), затем на **Compile** («Скомпилировать»), или используйте комбинацию горячих клавиш _Ctrl + K_.
-4. После того, как Dream Maker скомпилирует сборку, в консольном окне в нижней части, должно появится **сообщение**:  
+4. После того, как Dream Maker скомпилирует сборку, в консольном окне в нижней части, должно появится **сообщение**:
 ```
 ...
 saving baystation12.dmb (DEBUG mode)
 baystation12.dmb - 0 errors, 0 warnings
-```  
+```
 Где errors — ошибки, warnings — предупреждения. При наличии ошибок, пожалуйста, обратитесь <a href="#ссылки">к разработчикам</a>.
 
 
@@ -128,12 +132,12 @@ baystation12.dmb - 0 errors, 0 warnings
 
 На случай, если вы не имеете базу данных под управление **СУБД MySQL** или **MariaDB**, вам нужно будет изменить конфигурацию сборки для запуска.
 1. Закомментируйте **ENABLE_STAT_TRACKING** в файле <a href="https://github.com/infinitystation/Baystation12/blob/master/config/dbconfig.txt">**config/dbconfig.txt**</a> при помощи добавления символа «#» в начало строки. Должно получится так: `#ENABLE_STAT_TRACKING`.
-2. Закомментируйте **SQL_ENABLED** в файле <a href="https://github.com/infinitystation/Baystation12/blob/master/config/config.txt">**config/config.txt**</a> при помощи добавления символа «#» в начало строки. Должно получится так: `#SQL_ENABLED`.  
+2. Закомментируйте **SQL_ENABLED** в файле <a href="https://github.com/infinitystation/Baystation12/blob/master/config/config.txt">**config/config.txt**</a> при помощи добавления символа «#» в начало строки. Должно получится так: `#SQL_ENABLED`.
 
 
 ### ПОЛНОМОЧИЯ АДМИНИСТРАТОРА
-Для получения полномочий администратора на вашем локальном сервере, необходимо добавить в файл <a href="https://github.com/infinitystation/Baystation12/blob/master/config/admins.txt">**config/admins.txt**</a> новую запись, где нужно указать целевой никнейм, зарегистрированный в системе BYOND, и через символ «-» добавить любое из возможных званий из файла <a href="https://github.com/infinitystation/Baystation12/blob/master/config/example/admin_ranks.txt">**config/example/admin_ranks.txt**</a>, например:  
-`BYONDnickname - GameMaster`  
+Для получения полномочий администратора на вашем локальном сервере, необходимо добавить в файл <a href="https://github.com/infinitystation/Baystation12/blob/master/config/admins.txt">**config/admins.txt**</a> новую запись, где нужно указать целевой никнейм, зарегистрированный в системе BYOND, и через символ «-» добавить любое из возможных званий из файла <a href="https://github.com/infinitystation/Baystation12/blob/master/config/example/admin_ranks.txt">**config/example/admin_ranks.txt**</a>, например:
+`BYONDnickname - GameMaster`
 **Обратите внимание!** Каждый целевой никнейм BYOND, указанный здесь, должен быть в **нижнем регистре**, содержать только **буквы** и **цифры**.
 
 
@@ -152,23 +156,23 @@ baystation12.dmb - 0 errors, 0 warnings
 ![screenshot](https://pp.userapi.com/c857436/v857436830/1499d/TR6XdraONeA.jpg)
 
 1. В корневой директории репозитория найдите и запустите программу <a href="https://github.com/infinitystation/Baystation12/blob/master/mergetool.py">**mergetool.py**</a>.
-2. После запуска вы увидите окно, в котором вы должны ввести **4 параметра**.  
-2.1. В поле «**Remote Repo name**» введите любое значение, необязательно осмысленное.  
-2.2. В поле «**Remote Repo Link**» введите "<a href="https://www.codefactor.io/repository/github/infinitystation/baystation12">**https://github.com/infinitystation/Baystation12**</a>"  
-2.3. В поле «**Remote Repo Branch**» введите **master** или другую ветку изменения, которой вы хотите перенести на свою ветвь.  
+2. После запуска вы увидите окно, в котором вы должны ввести **4 параметра**.
+2.1. В поле «**Remote Repo name**» введите любое значение, необязательно осмысленное.
+2.2. В поле «**Remote Repo Link**» введите "<a href="https://www.codefactor.io/repository/github/infinitystation/baystation12">**https://github.com/infinitystation/Baystation12**</a>"
+2.3. В поле «**Remote Repo Branch**» введите **master** или другую ветку изменения, которой вы хотите перенести на свою ветвь.
 2.4. В поле «**Local Repo Branch**» введите **master** или другую ветку, которую вы хотите обновить.
 3. Нажмите кнопку **"TOGGLE UPDATE MODE"** для коректного обновления.
 4. Нажмите кнопку <font color='#00ff00'>**GO!**</font> и ожидайте завершения.
 5. Дождавшись окончания, нажмите кнопку <font color='#ff0000'>**End**</font>.
 
 ## ЛИЦЕНЗИЯ
-Весь исходный код после 8-го Января 2015-го года в 03:00 по Московскому времени лицензируется на условиях лицензионного соглашения [GNU Affero General Public License v3](http://www.gnu.org/licenses/agpl.html).  
-В том числе и инструменты, если в их файле readme не указано другое. Подробнее в файлах LICENSE или GPLv3.txt.  
+Весь исходный код после 8-го Января 2015-го года в 03:00 по Московскому времени лицензируется на условиях лицензионного соглашения [GNU Affero General Public License v3](http://www.gnu.org/licenses/agpl.html).
+В том числе и инструменты, если в их файле readme не указано другое. Подробнее в файлах LICENSE или GPLv3.txt.
 
-Исходный код клиентской стороны tgui лицензируется как подпроект на условиях лицензионного соглашения MIT.  
-Файлы шрифтов Font Awesome, исползуемые tgui, лицензируется на условиях лицензионного соглашения SIL Open Font License v1.1  
-Ресурсы tgui лицензируется на условиях лицензионного соглашения Creative Commons BY-SA 4.0 [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/).  
-Подробнее в файлах tgui/LICENSE.md и tgui/assets/fonts/SIL-OFL-1.1-LICENSE.md.  
+Исходный код клиентской стороны tgui лицензируется как подпроект на условиях лицензионного соглашения MIT.
+Файлы шрифтов Font Awesome, исползуемые tgui, лицензируется на условиях лицензионного соглашения SIL Open Font License v1.1
+Ресурсы tgui лицензируется на условиях лицензионного соглашения Creative Commons BY-SA 4.0 [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/).
+Подробнее в файлах tgui/LICENSE.md и tgui/assets/fonts/SIL-OFL-1.1-LICENSE.md.
 
 Все содержимое, включая иконки и звуки, лицензируется на условиях лицензионного соглашения [Creative Commons 3.0 BY-SA license](http://creativecommons.org/licenses/by-sa/3.0/).
 

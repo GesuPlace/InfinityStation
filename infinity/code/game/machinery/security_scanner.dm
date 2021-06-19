@@ -31,21 +31,26 @@
 	var/check_arrests = FALSE // check if we checking for arrests in record
 
 	// Banned items
-	var/list/banned_items = list(/obj/item/weapon/gun, /obj/item/weapon/melee, /obj/item/weapon/grenade)
-	var/list/storage_types = list(/obj/item/weapon/storage, /obj/item/clothing/suit/storage, /obj/structure/closet)
+	var/list/banned_items = list(/obj/item/gun, /obj/item/melee, /obj/item/grenade)
+	var/list/storage_types = list(/obj/item/storage, /obj/item/clothing/suit/storage, /obj/structure/closet)
 
 	var/report_scans = FALSE
 
 //	var/last_perp = 0
 //	var/last_contraband = 0
 
+/obj/machinery/security_scanner/unwrenched
+	anchored = FALSE
+
 /obj/machinery/security_scanner/Initialize(mapload)
 	if(mapload)
-		on = TRUE
+		if(anchored)
+			on = TRUE
 		bypass_filter = TRUE
 		check_items = TRUE
 		check_records = TRUE
 		check_arrests = TRUE
+		report_scans = TRUE
 	. = ..()
 
 /obj/machinery/security_scanner/power_change()
@@ -57,7 +62,7 @@
 		stat |= NOPOWER
 		update_icon()
 
-/obj/machinery/security_scanner/attackby(obj/item/weapon/W, mob/user)
+/obj/machinery/security_scanner/attackby(obj/item/W, mob/user)
 	if(emagged)
 		to_chat(user, SPAN_WARNING("ERROR"))
 		return
@@ -66,7 +71,7 @@
 		to_chat(user, SPAN_WARNING("It must be turned off first!"))
 		return
 
-	if(istype(W, /obj/item/weapon/card/id))
+	if(istype(W, /obj/item/card/id))
 		if(check_access(user, req_access))
 			locked = !locked
 			to_chat(user, SPAN_NOTICE("You [locked ? "lock" : "unlock"] \the [src] interface."))
@@ -74,7 +79,7 @@
 			to_chat(user, SPAN_WARNING("Access denied."))
 		return
 
-	if(istype(W, /obj/item/weapon/wrench))
+	if(istype(W, /obj/item/wrench))
 		visible_message(
 			SPAN_NOTICE("You begin [anchored ? "un" : ""]securing [src]..."),
 			SPAN_NOTICE("[user] begin [anchored ? "un" : ""]securing [src]..."))
@@ -87,7 +92,7 @@
 			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		return
 
-	if(istype(W, /obj/item/weapon/card/emag))
+	if(istype(W, /obj/item/card/emag))
 		emag_act()
 		return
 
@@ -155,13 +160,22 @@
 
 /obj/machinery/security_scanner/Crossed(atom/movable/A)
 	if(anchored && on && !stat)
-		if(isbot(A))		// Ignore that small shit
+		if(isbot(A) || isanimal(A))		// Ignore that small shit
 			trigger(FALSE)
 			return ..()
 		else if(isliving(A))
-			do_scan(A)
-		else if(istype(A, /mob/observer/ghost))
-			//Ghost triggers feature here
+			// Stop shouting on mechas
+			if(istype(A, /mob/living/exosuit))
+				var/mob/living/exosuit/exo = A
+				for(var/mob/living/L in exo.pilots)
+					// did you know, that ALL mobs can be in pilots? huh?
+					if(isliving(L))
+						do_scan(L)
+			else
+				do_scan(A)
+		else if(isobserver(A))
+			if(emagged)
+				trigger(TRUE)
 		else if(check_items && isobj(A))
 			var/list/items = do_scan_item(A)
 			if(items && items.len)
@@ -230,11 +244,11 @@
 		return
 
 	// Agent cards lower threatlevel.
-	var/obj/item/weapon/card/id/id = target.GetIdCard()
-	if(id && istype(id, /obj/item/weapon/card/id/syndicate))
+	var/obj/item/card/id/id = target.GetIdCard()
+	if(id && istype(id, /obj/item/card/id/syndicate))
 		.["level"] -= 2
 	// A proper CentCom id is hard currency.
-	else if(id && istype(id, /obj/item/weapon/card/id/centcom))
+	else if(id && istype(id, /obj/item/card/id/centcom))
 		.["level"] = SCANNER_THREAT_RESET
 		return
 
@@ -269,7 +283,7 @@
 		.["Violator"] += perpname
 
 		var/datum/computer_file/report/crew_record/CR = RecordByName(perpname)
-		if(check_records && !CR && !target.isMonkey())
+		if(check_records && !CR && !target.is_species(SPECIES_MONKEY))
 			.["level"] += 4
 			.["Unknown"] += TRUE
 

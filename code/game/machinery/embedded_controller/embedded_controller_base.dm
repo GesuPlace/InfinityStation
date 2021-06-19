@@ -1,6 +1,6 @@
 /obj/machinery/embedded_controller
 	name = "Embedded Controller"
-	anchored = 1
+	anchored = TRUE
 	idle_power_usage = 10
 	var/datum/computer/file/embedded_program/program	//the currently executing program
 	var/on = 1
@@ -47,8 +47,8 @@
 	icon = 'icons/obj/airlock_machines.dmi'
 	icon_state = "airlock_control_off"
 	power_channel = ENVIRON
-	density = 0
-	unacidable = 1
+	density = FALSE
+	unacidable = TRUE
 	var/frequency = 1379
 	var/radio_filter = null
 	var/datum/radio_frequency/radio_connection
@@ -66,13 +66,21 @@ obj/machinery/embedded_controller/radio/Destroy()
 	overlays.Cut()
 	if(!on || !istype(program))
 		return
+// [INF]
+	if(emagged)
+		overlays += image(icon, "screen_drain")
+		overlays += image(icon, "indicator_active")
+		overlays += image(icon, "indicator_forced")
+		overlays += image(icon, "indicator_done")
+		return
+// /[INF]
 	if(!program.memory["processing"])
 		overlays += image(icon, "screen_standby")
 		overlays += image(icon, "indicator_done")
 	else
 		overlays += image(icon, "indicator_active")
 	var/datum/computer/file/embedded_program/docking/airlock/docking_program = program
-	var/datum/computer/file/embedded_program/airlock/docking/airlock_program = program
+	var/datum/computer/file/embedded_program/airlock/airlock_program = program
 	if(istype(docking_program))
 		if(docking_program.override_enabled)
 			overlays += image(icon, "indicator_forced")
