@@ -12,6 +12,7 @@
 #define VERM_MICE 0
 #define VERM_LIZARDS 1
 #define VERM_SPIDERS 2
+#define VERM_SNAKES 3
 
 /datum/event/infestation
 	announceWhen = 10
@@ -31,24 +32,28 @@
 
 	if(!vermin_turfs)
 		log_debug("Vermin infestation failed to find a viable spawn after 3 attempts. Aborting.")
-		kill()
+		kill(TRUE)
 
 	var/list/spawn_types = list()
 	var/max_number
-	vermin = rand(0,2)
+	vermin = rand(1,3)	// INF, было:	vermin = rand(0,3) | Пока что убираем мышек из ротации ~bear1ake
 	switch(vermin)
 		if(VERM_MICE)
-			spawn_types = list(/mob/living/simple_animal/mouse) // The base mouse type selects a random color for us
+			spawn_types = list(/mob/living/simple_animal/friendly/mouse) // The base mouse type selects a random color for us
 			max_number = 12
 			vermstring = "mice"
 		if(VERM_LIZARDS)
-			spawn_types = list(/mob/living/simple_animal/lizard)
+			spawn_types = list(/mob/living/simple_animal/friendly/lizard)
 			max_number = 6
 			vermstring = "lizards"
 		if(VERM_SPIDERS)
 			spawn_types = list(/obj/effect/spider/spiderling)
 			max_number = 3
 			vermstring = "spiders"
+		if(VERM_SNAKES)	// Змеи? Откуда они?
+			spawn_types = list(/mob/living/simple_animal/hostile/retaliate/snake)
+			max_number = 4
+			vermstring = "snakes"
 
 	spawn(0)
 		var/num = 0
@@ -76,7 +81,7 @@
 	location = pick_area(list(/proc/is_not_space_area, /proc/is_station_area))
 	if(!location)
 		log_debug("Vermin infestation failed to find a viable area. Aborting.")
-		kill()
+		kill(TRUE)
 		return
 
 	var/list/vermin_turfs = get_area_turfs(location, list(/proc/not_turf_contains_dense_objects, /proc/IsTurfAtmosSafe))
@@ -98,3 +103,4 @@
 #undef VERM_MICE
 #undef VERM_LIZARDS
 #undef VERM_SPIDERS
+#undef VERM_SNAKES

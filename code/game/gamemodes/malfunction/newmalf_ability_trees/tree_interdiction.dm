@@ -47,6 +47,12 @@
 	if(!ability_prechecks(user, price))
 		return
 
+// [INF]
+	if(istype(evacuation_controller, /datum/evacuation_controller/starship/fast) && evacuation_controller.confirmed == "confirmed")
+		to_chat(user, "Протокол эвакуации подтвержден органиками, система отвергает твои попытки повлиять на нее.")
+		return
+// [/INF]
+
 	if (alert(user, "Really recall the shuttle?", "Recall Shuttle: ", "Yes", "No") != "Yes")
 		return
 
@@ -187,7 +193,7 @@
 			// Connect the cyborg to AI
 			target.connected_ai = user
 			user.connected_robots += target
-			target.lawupdate = 1
+			target.lawupdate = TRUE
 			target.sync()
 			target.show_laws()
 			log_ability_use(user, "hack cyborg", target)

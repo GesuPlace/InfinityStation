@@ -13,10 +13,18 @@
 	)
 	call_webhook = WEBHOOK_SUBMAP_LOADED_LIBERIA
 
+/decl/submap_archetype/liberia/New()
+	. = ..()
+	GLOB.using_map.map_admin_faxes.Add("FTU Agency")
+	for(var/obj/machinery/photocopier/faxmachine/fax in SSmachines.machinery)
+		fax.admin_departments += "FTU Agency"
+
 /datum/job/submap/merchant
 	title = "Merchant"
 
-	info = "Вы свободные торговцы, которых в поисках выгоды занесло в неизведанные дали. Путешествуйте, торгуйте, make profit!"
+	info = "Вы свободные торговцы, которых в поисках выгоды занесло в неизведанные дали. Путешествуйте, торгуйте, make profit! \
+	\
+	Посещать неизведанные обьекты крайне небезопасно. Вы торговцы, а не мусорщики, ваша смерть не принесет прибыли, не лезьте куда не надо."
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "невидимой рукой рынка"
@@ -25,6 +33,8 @@
 	minimal_player_age = 7
 	create_record = 0
 	outfit_type = /decl/hierarchy/outfit/job/liberia/merchant/leader
+	whitelisted_species = null
+	blacklisted_species = list(SPECIES_ALIEN, SPECIES_GOLEM, SPECIES_MANTID_GYNE, SPECIES_MANTID_ALATE, SPECIES_MONARCH_WORKER, SPECIES_MONARCH_QUEEN, SPECIES_XENO)
 	allowed_branches = list(
 		/datum/mil_branch/civilian
 	)
@@ -79,6 +89,8 @@
 	ideal_character_age = 20
 	minimal_player_age = 0
 	create_record = 0
+	whitelisted_species = null
+	blacklisted_species = list(SPECIES_ALIEN, SPECIES_GOLEM, SPECIES_MANTID_GYNE, SPECIES_MANTID_ALATE, SPECIES_MONARCH_WORKER, SPECIES_MONARCH_QUEEN, SPECIES_XENO)
 	alt_titles = list(
 		"Merchant Security" = /decl/hierarchy/outfit/job/liberia/merchant/security
 	)
@@ -102,11 +114,10 @@
 		SKILL_COMBAT  = SKILL_MAX,
 	    SKILL_WEAPONS = SKILL_MAX
 	)
-/* Broken cuz abstract submap jobs is not writing to SStrade.primary_job_datums, need another way to check availability of job
 	required_role = list(
 		"Merchant"
 	)
-*/
+
 	give_psionic_implant_on_join = FALSE
 
 	skill_points = 24
@@ -135,7 +146,7 @@
 	l_ear = null
 	shoes = /obj/item/clothing/shoes/brown
 //	pda_type = /obj/item/modular_computer/pda
-	id_type = /obj/item/weapon/card/id/liberia/merchant
+	id_types = list(/obj/item/card/id/liberia/merchant)
 
 /decl/hierarchy/outfit/job/liberia/merchant/security
 	name = OUTFIT_JOB_NAME("Merchant Security")
@@ -147,14 +158,14 @@
 	name = OUTFIT_JOB_NAME("Merchant Leader - liberia")
 	uniform = /obj/item/clothing/under/suit_jacket/charcoal
 	shoes = /obj/item/clothing/shoes/laceup
-	id_type = /obj/item/weapon/card/id/liberia/merchant/leader
+	id_types = list(/obj/item/card/id/liberia/merchant/leader)
 
-/obj/item/weapon/card/id/liberia/merchant
+/obj/item/card/id/liberia/merchant
 	desc = "An identification card issued to Merchants."
 	job_access_type = /datum/job/submap/merchant_trainee
 	color = COLOR_OFF_WHITE
 	detail_color = COLOR_BEIGE
 
-/obj/item/weapon/card/id/liberia/merchant/leader
+/obj/item/card/id/liberia/merchant/leader
 	desc = "An identification card issued to Merchant Leaders, indicating their right to sell and buy goods."
 	job_access_type = /datum/job/submap/merchant

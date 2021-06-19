@@ -21,6 +21,8 @@
 	var/flashlight_outer_range = 3 //outer range of light when on, can be negative
 	var/flashlight_flags = 0 // FLASHLIGHT_ bitflags
 
+	var/tmp/toogle_cooldown //inf
+
 /obj/item/device/flashlight/Initialize()
 	. = ..()
 
@@ -37,6 +39,8 @@
 		icon_state = "[initial(icon_state)]"
 
 /obj/item/device/flashlight/attack_self(mob/user)
+	if(toogle_cooldown >= world.time)
+		return 0
 	if (flashlight_flags & FLASHLIGHT_ALWAYS_ON)
 		to_chat(user, "You cannot toggle the [name].")
 		return 0
@@ -48,10 +52,20 @@
 	if (flashlight_flags & FLASHLIGHT_SINGLE_USE && on)
 		to_chat(user, "The [name] is already lit.")
 		return 0
-
+//[INF]
+	toogle_cooldown = world.time + 5
+	if(!on && activation_sound)
+		playsound(get_turf(src), activation_sound, 75, 1)
+	if(suitable_cell)
+		var/obj/item/cell/C = get_cell()
+		if(!C || !C.checked_use(get_power_cost()))
+			return 0
+//[/INF]
 	on = !on
+/*[ORIG]
 	if(on && activation_sound)
 		playsound(get_turf(src), activation_sound, 75, 1)
+[ORIG]*/
 	set_flashlight()
 	update_icon()
 	user.update_action_buttons()
@@ -60,8 +74,10 @@
 /obj/item/device/flashlight/proc/set_flashlight()
 	if (on)
 		set_light(flashlight_max_bright, flashlight_inner_range, flashlight_outer_range, 2, light_color)
+		START_PROCESSING(SSobj, src)//inf
 	else
-		set_light(0)
+		turn_off()//inf, was:		set_light(0)
+	update_icon()//inf
 
 /obj/item/device/flashlight/attack(mob/living/M as mob, mob/living/user as mob)
 	add_fingerprint(user)
@@ -235,7 +251,7 @@
 	flashlight_inner_range = 1.5 //INF, WAS 2
 	flashlight_outer_range = 3.5 //INF, WAS 5
 
-	on = 1
+	on = 0//inf, was on = 1
 
 // green-shaded desk lamp
 /obj/item/device/flashlight/lamp/green
@@ -431,9 +447,9 @@
 	w_class = ITEM_SIZE_LARGE
 	obj_flags = OBJ_FLAG_CONDUCTIBLE | OBJ_FLAG_ROTATABLE
 
-	flashlight_max_bright = 1
-	flashlight_inner_range = 3
-	flashlight_outer_range = 7
+	flashlight_max_bright = 0.8
+	flashlight_inner_range = 1
+	flashlight_outer_range = 5
 
 /obj/item/device/flashlight/lamp/floodlamp/green
 	icon_state = "greenfloodlamp"
@@ -460,30 +476,30 @@
 	light_color = COLOR_RED
 
 /obj/item/device/flashlight/lamp/lava/blue
-	desc = "A kitchy blue decorative light"
+	desc = "A kitchy blue decorative light."
 	light_color = COLOR_BLUE
 
 /obj/item/device/flashlight/lamp/lava/cyan
-	desc = "A kitchy cyan decorative light"
+	desc = "A kitchy cyan decorative light."
 	light_color = COLOR_CYAN
 
 /obj/item/device/flashlight/lamp/lava/green
-	desc = "A kitchy green decorative light"
+	desc = "A kitchy green decorative light."
 	light_color = COLOR_GREEN
 
 /obj/item/device/flashlight/lamp/lava/orange
-	desc = "A kitchy orange decorative light"
+	desc = "A kitchy orange decorative light."
 	light_color = COLOR_ORANGE
 
 /obj/item/device/flashlight/lamp/lava/purple
-	desc = "A kitchy purple decorative light"
+	desc = "A kitchy purple decorative light."
 	light_color = COLOR_PURPLE
 /obj/item/device/flashlight/lamp/lava/pink
-	desc = "A kitchy pink decorative light"
+	desc = "A kitchy pink decorative light."
 	light_color = COLOR_PINK
 
 /obj/item/device/flashlight/lamp/lava/yellow
-	desc = "A kitchy yellow decorative light"
+	desc = "A kitchy yellow decorative light."
 	light_color = COLOR_YELLOW
 
 #undef FLASHLIGHT_ALWAYS_ON
